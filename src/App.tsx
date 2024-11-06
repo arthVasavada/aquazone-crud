@@ -1,4 +1,5 @@
 import DataRetrieval from "./components/DataRetrieval";
+import DataUpdation from "./components/DataUpdation";
 
 
 function App() {
@@ -6,6 +7,7 @@ function App() {
 
   return (
     <>
+     <DataUpdation />
      <DataRetrieval />
     </>
   );

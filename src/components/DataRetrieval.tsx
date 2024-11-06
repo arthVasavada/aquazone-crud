@@ -31,9 +31,15 @@ database when the component mounts. Here's a breakdown of what it's doing: */
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col">
         {users.map((user) => {
-          return <div key={user.id}><h1>Name:{user.Firstname}</h1></div>;
+          return <div key={user.id} className="flex flex-row gap-5 justify-evenly"><h1 className="text-2xl font-sans font-black">First Name:<h2 className="text-2xl font-sans font-medium">{user.Firstname}</h2></h1>
+          <h1 className="text-2xl font-sans font-black">Last Name:<h2 className="text-2xl font-sans font-medium">{user.Lastname}</h2></h1>
+          <h1 className="text-2xl font-sans font-black">Phone Number:<h2 className="text-2xl font-sans font-medium">{user.Phoneno}</h2></h1>
+          <h1 className="text-2xl font-sans font-black">Address:<h2 className="text-2xl font-sans font-medium">{user.Address}</h2></h1>
+          <h1 className="text-2xl font-sans font-black">City:<h2 className="text-2xl font-sans font-medium">{user.City}</h2></h1>
+          <h1 className="text-2xl font-sans font-black">Pincode:<h2 className="text-2xl font-sans font-medium">{user.Pincode}</h2></h1>
+          </div>;
         })}
       </div>
   )
