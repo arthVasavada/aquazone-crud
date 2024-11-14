@@ -2,26 +2,39 @@ import { addDoc, collection } from "firebase/firestore";
 import { useState } from "react";
 import { db } from "../firebaseConfig";
 
+// Define types for the form state
+interface FormErrors {
+  firstName?: string;
+  lastName?: string;
+  phoneNo?: string;
+  address?: string;
+  city?: string;
+  pincode?: string;
+}
+
 const DataGeneration = () => {
-  const [newFirstName, setNewFirstName] = useState("");
-  const [newLastName, setNewLastName] = useState("");
-  const [newPhoneNo, setNewPhoneNo] = useState("");
-  const [newAddress, setNewAddress] = useState("");
-  const [newCity, setNewCity] = useState("");
-  const [newPincode, setNewPincode] = useState("");
-  const [errors, setErrors] = useState({});
-  const [successMessage, setSuccessMessage] = useState("");
+  // State variables with appropriate types
+  const [newFirstName, setNewFirstName] = useState<string>("");
+  const [newLastName, setNewLastName] = useState<string>("");
+  const [newPhoneNo, setNewPhoneNo] = useState<string>("");
+  const [newAddress, setNewAddress] = useState<string>("");
+  const [newCity, setNewCity] = useState<string>("");
+  const [newPincode, setNewPincode] = useState<string>("");
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [successMessage, setSuccessMessage] = useState<string>("");
 
   const usersCollectionRef = collection(db, "users");
 
-  const validateFirstName = (name) => name.trim() !== "";
-  const validateLastName = (name) => name.trim() !== "";
-  const validatePhoneNo = (phone) => /^\d{10}$/.test(phone);
-  const validateAddress = (address) => address.trim() !== "";
-  const validateCity = (city) => city.trim() !== "";
-  const validatePincode = (pincode) => /^[A-Za-z0-9]{6}$/.test(pincode);
+  // Validation functions
+  const validateFirstName = (name: string): boolean => name.trim() !== "";
+  const validateLastName = (name: string): boolean => name.trim() !== "";
+  const validatePhoneNo = (phone: string): boolean => /^\d{10}$/.test(phone);
+  const validateAddress = (address: string): boolean => address.trim() !== "";
+  const validateCity = (city: string): boolean => city.trim() !== "";
+  const validatePincode = (pincode: string): boolean => /^[A-Za-z0-9]{6}$/.test(pincode);
 
-  const handleBlur = (field) => {
+  // Handle blur event and validate specific fields
+  const handleBlur = (field: keyof FormErrors): void => {
     const newErrors = { ...errors };
 
     switch (field) {
@@ -49,7 +62,8 @@ const DataGeneration = () => {
     setErrors(newErrors);
   };
 
-  const createUser = async () => {
+  // Create new user in Firestore
+  const createUser = async (): Promise<void> => {
     const formValid = Object.values(errors).every((error) => error === "");
     if (!formValid) return;
 
@@ -78,7 +92,8 @@ const DataGeneration = () => {
     }
   };
 
-  const inputClass = (field) =>
+  // Apply classes based on validation errors
+  const inputClass = (field: keyof FormErrors): string =>
     `bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 ${
       errors[field] ? "border-red-500 focus:border-red-500" : "border-gray-300"
     }`;
