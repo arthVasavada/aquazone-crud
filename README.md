@@ -35,7 +35,7 @@ Aquazone is a full-stack web application built using **React** and **Firebase**.
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/aquazone.git
+git clone https://github.com/arthVasavada/aquazone-crud.git
 ```
 
 ### **2. Install dependencies**
