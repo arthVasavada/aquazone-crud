@@ -3,16 +3,16 @@ import { auth } from "./firebaseConfig";
 import { signOut } from "firebase/auth";
 import Auth from "./components/Auth";
 import DataGeneration from "./components/DataGeneration";
+import DataRetrieval from "./components/DataRetrieval";
 
 const App: React.FC = () => {
   const [user, setUser] = useState<any>(null);
-  const sessionTimeout = 5 * 60 * 1000; // 30 minutes
+  const [selectedSection, setSelectedSection] = useState<"generation" | "retrieval">("generation");
+  const sessionTimeout = 5 * 60 * 1000; // 5 minutes
 
   useEffect(() => {
-    // Listen for authentication state changes
     const unsubscribe = auth.onAuthStateChanged(setUser);
 
-    // Set up a session timeout to log the user out after the specified duration
     let timeout: NodeJS.Timeout;
     if (user) {
       timeout = setTimeout(() => {
@@ -21,7 +21,6 @@ const App: React.FC = () => {
       }, sessionTimeout);
     }
 
-    // Clean up the timeout and unsubscribe from auth listener on component unmount
     return () => {
       clearTimeout(timeout);
       unsubscribe();
@@ -29,23 +28,61 @@ const App: React.FC = () => {
   }, [user]);
 
   return (
-    <main className="flex flex-col bg-gradient-to-t from-neutral-400 to-neutral-200 items-center justify-between h-screen w-full">
-      <section className="flex flex-col sm:flex-row w-full items-center justify-between p-6 sm:p-10">
-        <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black bg-gradient-to-t from-cyan-600 to-blue-400 inline-block text-transparent bg-clip-text text-center sm:text-left">
+    <main className="flex flex-col min-h-screen w-full bg-gradient-to-t from-neutral-400 to-neutral-200 items-center justify-center">
+      {/* Header Section */}
+      <section className="flex flex-col items-center justify-center space-y-4 p-6 sm:p-10">
+        <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold bg-gradient-to-t from-cyan-600 to-blue-400 inline-block text-transparent bg-clip-text text-center">
           AQUAZONE
         </h1>
 
-        <button
-          onClick={() => signOut(auth)}
-          type="button"
-          className="mt-6 sm:mt-0 sm:ml-6 text-slate-50 bg-gradient-to-r from-blue-700 to-cyan-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-amber-300 dark:focus:ring-amber-800 shadow-lg shadow-amber-500/50 dark:shadow-lg dark:shadow-amber-800/80 font-medium rounded-lg text-sm px-6 py-2 sm:px-8 sm:py-0 lg:px-10 lg:py-2 h-10 self-center"
-        >
-          Sign Out
-        </button>
+        {/* Show Logout button only if user is logged in */}
+        {user && (
+          <button
+            onClick={() => signOut(auth)}
+            className="text-sm text-blue-500 hover:text-blue-600 focus:outline-none"
+          >
+            Logout
+          </button>
+        )}
       </section>
 
-      <section className="w-full p-10">
-        {user ? <DataGeneration /> : <Auth />}
+      {/* Section Navigation (Visible when user is logged in) */}
+      <section className="w-full p-4 sm:p-10">
+        {user ? (
+          <>
+            <div className="flex justify-center space-x-4 mb-6">
+              <button
+                onClick={() => setSelectedSection("generation")}
+                className={`px-6 py-3 rounded-lg text-white font-medium ${
+                  selectedSection === "generation"
+                    ? "bg-blue-500"
+                    : "bg-gray-300 text-gray-700"
+                }`}
+              >
+                Data Generation
+              </button>
+              <button
+                onClick={() => setSelectedSection("retrieval")}
+                className={`px-6 py-3 rounded-lg text-white font-medium ${
+                  selectedSection === "retrieval"
+                    ? "bg-blue-500"
+                    : "bg-gray-300 text-gray-700"
+                }`}
+              >
+                Data Retrieval
+              </button>
+            </div>
+
+            {/* Render the selected section */}
+            {selectedSection === "generation" ? (
+              <DataGeneration />
+            ) : (
+              <DataRetrieval />
+            )}
+          </>
+        ) : (
+          <Auth />
+        )}
       </section>
     </main>
   );
