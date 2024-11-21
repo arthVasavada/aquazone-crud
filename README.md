@@ -1,6 +1,8 @@
+
+```markdown
 # **Aquazone CRUD Application**
 
-Aquazone is a full-stack web application built using **React** and **Firebase**. It allows users to **create**, **read**, **update**, and **delete** data entries. The app features user authentication via **Firebase Authentication** and uses **Firebase Firestore** as the database to store and retrieve data.
+Aquazone is a full-stack web application built using **React**, **Vite**, and **Firebase**. It allows users to **create**, **read**, **update**, and **delete** data entries. The app features user authentication via **Firebase Authentication** and uses **Firebase Firestore** as the database to store and retrieve data.
 
 ---
 
@@ -19,6 +21,7 @@ Aquazone is a full-stack web application built using **React** and **Firebase**.
 
 - **Frontend**: 
   - React
+  - Vite (for fast development and bundling)
   - TailwindCSS (for styling)
 - **Backend**:
   - Firebase Authentication (for user authentication)
@@ -42,42 +45,60 @@ git clone https://github.com/arthVasavada/aquazone-crud.git
 Navigate to the project directory and install the required dependencies using npm:
 
 ```bash
-cd aquazone
+cd aquazone-crud
 npm install
 ```
 
 ### **3. Set up Firebase**
+
 - Create a Firebase project by going to [Firebase Console](https://console.firebase.google.com/).
 - Set up **Firebase Authentication** and **Firestore Database** in your Firebase console.
-- Get your Firebase config object from the Firebase Console and add it to the `firebaseConfig.js` file in your project.
+- Get your Firebase config object from the Firebase Console and add it to the environment variables for security.
 
-Example `firebaseConfig.js`:
+### **4. Set up environment variables**
 
-```js
+Create a `.env` file in the root of the project and add your Firebase credentials:
+
+```env
+VITE_FIREBASE_API_KEY=YOUR_API_KEY
+VITE_FIREBASE_AUTH_DOMAIN=YOUR_PROJECT_ID.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+VITE_FIREBASE_STORAGE_BUCKET=YOUR_PROJECT_ID.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=YOUR_SENDER_ID
+VITE_FIREBASE_APP_ID=YOUR_APP_ID
+```
+
+### **5. Update Firebase config file**
+
+In the `src/firebaseConfig.ts` file, update the Firebase configuration to use the environment variables:
+
+```ts
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
+// Access Firebase configuration from environment variables
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
-
 export const auth = getAuth(app);
 export const db = getFirestore(app);
 ```
 
-### **4. Run the application**
-Once everything is set up, you can start the development server with:
+**Note**: Make sure that the `.env` file is added to `.gitignore` to prevent sensitive keys from being pushed to GitHub.
+
+### **6. Run the application**
+Once everything is set up, you can start the development server with Vite:
 
 ```bash
-npm start
+npm run dev
 ```
 
 The application should now be running at `http://localhost:3000`.
@@ -110,6 +131,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Firebase for Authentication and Firestore.
 - React and TailwindCSS for building the UI.
+- Vite for faster development and bundling.
 - Open-source community for continuous support and resources.
 
 ---
@@ -119,7 +141,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Implement form validation for data entry.
 - Add a "search" or "filter" feature for data retrieval.
 - Implement more complex data relationships (e.g., adding multiple fields with data references).
+```
 
----
+### Key Modifications:
 
-This README gives a comprehensive overview of your project, from the features and technologies used to installation and usage instructions. Feel free to adapt it further as you continue to work on the project.
+1. **Mention Vite**: Now, the README clearly states that the project uses **Vite** as the build tool.
+2. **Environment Variables**: Instructions are added for setting up environment variables with Firebase keys securely.
+3. **Configuration File Updates**: The Firebase configuration in the `firebaseConfig.ts` is updated to fetch keys from environment variables, ensuring sensitive information is not hardcoded.
+4. **Vite Commands**: Instructions to run the app using `npm run dev`, as it’s the default script for Vite.
+

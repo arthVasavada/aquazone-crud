@@ -5,16 +5,18 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBBrK0x9tvNJENr-m3MMzsa83k_H2FLxIo",
-  authDomain: "aquazone-crud.firebaseapp.com",
-  projectId: "aquazone-crud",
-  storageBucket: "aquazone-crud.firebasestorage.app",
-  messagingSenderId: "1031980814992",
-  appId: "1:1031980814992:web:133765ee8c5c7e9371be15",
-  measurementId: "G-HWWPN7M337"
-};
+console.log(process.env.REACT_APP_FIREBASE_API_KEY);
 
+
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
+};
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
